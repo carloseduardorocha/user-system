@@ -24,6 +24,17 @@ interface IUserService
     public static function login(string $email, string $password): ?string;
 
     /**
+     * Create user
+     *
+     * @param string $email
+     * @param string $name
+     * @param string $password
+     *
+     * @return array<mixed>
+     */
+    public static function create(string $email, string $name, string $password): array;
+
+    /**
      * Update user information.
      *
      * @param string $uuid

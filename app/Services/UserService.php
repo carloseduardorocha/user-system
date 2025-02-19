@@ -43,6 +43,17 @@ class UserService implements IUserService
         return 'jwt token';
     }
 
+    public static function create(string $email, string $name, string $password): array
+    {
+        $user = User::create($email, $name, $password);
+
+        return [
+            'uuid'  => $user->uuid,
+            'name'  => $user->name,
+            'email' => $user->email,
+        ];
+    }
+
     public static function update(string $uuid, string $email, string $name): void
     {
         $user = User::get($uuid);
