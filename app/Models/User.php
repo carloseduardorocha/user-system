@@ -21,7 +21,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class User extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     public const ID         = 'id';
     public const UUID       = 'uuid';
