@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TTL;
+
 use App\Helpers\ApiResponse;
 
 use App\Services\UserService;
@@ -23,29 +25,29 @@ class UserController extends Controller
 {
     public function me(): JsonResponse
     {
-        $user = (array) auth('token')->user();
+        $user = auth('jwt')->user();
 
         if (!isset($user['uuid']))
         {
             throw new InvalidUUIDException();
         }
 
-        $user_info = UserService::me($user['uuid']);
+        $user_info = UserService::me($user['uuid']); // @phpstan-ignore-line
 
         return ApiResponse::jsonSuccess(new JsonResource($user_info), Response::HTTP_OK, 'User information retrieved successfully!');
     }
 
     public function login(LoginUserRequest $request): JsonResponse
     {
-        $data  = $request->validated();
-        $token = UserService::login($data['email'], $data['password']); // @phpstan-ignore-line
+        $credentials = $request->validated();
+        $token       = auth('jwt')->attempt($credentials);
 
-        if (is_null($token))
+        if (!$token)
         {
-            return ApiResponse::jsonError(new JsonResource([]), Response::HTTP_UNAUTHORIZED, 'Invalid credentials.');
+            return ApiResponse::jsonError(new JsonResource([]), Response::HTTP_UNAUTHORIZED, 'Unauthorized.');
         }
 
-        return ApiResponse::jsonSuccess(new JsonResource(['token' => $token]), Response::HTTP_OK, 'Login successful!');
+        return ApiResponse::jsonSuccess(new JsonResource($this->formatToken((string) $token)), Response::HTTP_OK, 'Login successful!');
     }
 
     public function create(CreateUserRequest $request): JsonResponse
@@ -58,7 +60,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request): JsonResponse
     {
-        $user = (array) auth('token')->user();
+        $user = auth('jwt')->user();
 
         if (!isset($user['uuid']))
         {
@@ -73,7 +75,7 @@ class UserController extends Controller
 
     public function updatePassword(UpdateUserPasswordRequest $request): JsonResponse
     {
-        $user = (array) auth('token')->user();
+        $user = auth('jwt')->user();
 
         if (!isset($user['uuid']))
         {
@@ -100,5 +102,21 @@ class UserController extends Controller
         $user = UserService::restore($data['uuid']); // @phpstan-ignore-line
 
         return ApiResponse::jsonSuccess(new JsonResource($user), Response::HTTP_OK, 'User restored successfully!');
+    }
+
+    /**
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return array<mixed>
+     */
+    protected function formatToken($token): array
+    {
+        return [
+            'token'      => $token,
+            'type'       => 'bearer',
+            'expires_in' => auth('jwt')->factory()->getTTL() * TTL::JWT_TOKEN->value //@phpstan-ignore-line
+        ];
     }
 }
