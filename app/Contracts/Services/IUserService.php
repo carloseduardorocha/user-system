@@ -70,7 +70,7 @@ interface IUserService
      *
      * @param string $uuid
      *
-     * @return void
+     * @return array<mixed>
      */
-    public static function restore(string $uuid): void;
+    public static function restore(string $uuid): array;
 }

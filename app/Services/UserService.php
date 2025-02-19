@@ -86,11 +86,24 @@ class UserService implements IUserService
         User::delete($uuid);
     }
 
-    public static function restore(string $uuid): void
+    public static function restore(string $uuid): array
     {
-        if (!User::restore($uuid))
+        if (User::restore($uuid))
         {
-            throw new ErrorOnRestoreUserException();
+            $user = User::get($uuid);
+
+            if (is_null($user))
+            {
+                throw new UserNotFoundException();
+            }
+
+            return [
+                'uuid'  => $user->uuid,
+                'name'  => $user->name,
+                'email' => $user->email,
+            ];
         }
+
+        throw new ErrorOnRestoreUserException();
     }
 }
