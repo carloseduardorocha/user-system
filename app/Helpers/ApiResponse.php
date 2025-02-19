@@ -52,6 +52,21 @@ class ApiResponse
     }
 
     /**
+     * Returns JSON formated response for Error.
+     *
+     * @param JsonResource $resource
+     * @param int $status_code
+     * @param string $message
+     * @return JsonResponse
+     */
+    public static function jsonError(JsonResource $resource, int $status_code, string $message): JsonResponse
+    {
+        return $resource->additional(self::format(false, [...$resource->additional], $message))
+            ->response()
+            ->setStatusCode($status_code);
+    }
+
+    /**
      * Returns JSON formated response for Exception.
      *
      * @param int $status_code
