@@ -30,6 +30,7 @@ class User extends Authenticatable
 
     public const ID         = 'id';
     public const UUID       = 'uuid';
+    public const NAME       = 'name';
     public const EMAIL      = 'email';
     public const PASSWORD   = 'password';
     public const DELETED_AT = 'deleted_at';
@@ -51,6 +52,7 @@ class User extends Authenticatable
     protected $fillable = [
         self::UUID,
         self::EMAIL,
+        self::NAME,
         self::PASSWORD,
     ];
 
