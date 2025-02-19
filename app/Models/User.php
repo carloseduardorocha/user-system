@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class User extends Model
 {
-    use HasFactory;
+    use HasFactory; // @phpstan-ignore-line
     use SoftDeletes;
 
     public const ID         = 'id';
@@ -42,7 +42,7 @@ class User extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int,string>
+     * @var list<string>
      */
     protected $fillable = [
         self::UUID,
@@ -60,7 +60,7 @@ class User extends Model
     /**
      * The attributes that should be cast to native types.
      *
-     * @var array<string,string>
+     * @var array<string, string>
      */
     protected $casts = [
         self::DELETED_AT => 'datetime',
