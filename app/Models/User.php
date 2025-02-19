@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+use Laravel\Passport\HasApiTokens;
+
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -19,10 +22,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @package App\Models
  */
-class User extends Model
+class User extends Authenticatable
 {
     use HasFactory; // @phpstan-ignore-line
     use SoftDeletes;
+    use HasApiTokens;
 
     public const ID         = 'id';
     public const UUID       = 'uuid';
