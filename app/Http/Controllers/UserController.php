@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ApiResponse;
 
-use App\Services\Api\UserService;
+use App\Services\UserService;
 
 use App\Http\Requests\LoginUserRequest;
 use App\Http\Requests\CreateUserRequest;
@@ -21,26 +21,16 @@ use App\Exceptions\Controllers\InvalidUUIDException;
 
 class UserController extends Controller
 {
-    /**
-     * User
-     *
-     * @var array<mixed>
-     */
-    protected $user;
-
-    public function __construct()
+    public function me(): JsonResponse
     {
-        $this->user = (array) auth('token')->user();
+        $user = (array) auth('token')->user();
 
-        if (!isset($this->user['uuid']))
+        if (!isset($user['uuid']))
         {
             throw new InvalidUUIDException();
         }
-    }
 
-    public function me(): JsonResponse
-    {
-        $user_info = UserService::me($this->user['uuid']); // @phpstan-ignore-line
+        $user_info = UserService::me($user['uuid']);
 
         return ApiResponse::jsonSuccess(new JsonResource($user_info), Response::HTTP_OK, 'User information retrieved successfully!');
     }
@@ -68,16 +58,30 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request): JsonResponse
     {
+        $user = (array) auth('token')->user();
+
+        if (!isset($user['uuid']))
+        {
+            throw new InvalidUUIDException();
+        }
+
         $data = $request->validated();
-        UserService::update($this->user['uuid'], $data['email'], $data['name']); // @phpstan-ignore-line
+        UserService::update($user['uuid'], $data['email'], $data['name']); // @phpstan-ignore-line
 
         return ApiResponse::jsonSuccess(new JsonResource([]), Response::HTTP_OK, 'User updated successfully!');
     }
 
     public function updatePassword(UpdateUserPasswordRequest $request): JsonResponse
     {
+        $user = (array) auth('token')->user();
+
+        if (!isset($user['uuid']))
+        {
+            throw new InvalidUUIDException();
+        }
+
         $data = $request->validated();
-        UserService::updatePassword($this->user['uuid'], $data['current_password'], $data['new_password']); // @phpstan-ignore-line
+        UserService::updatePassword($user['uuid'], $data['current_password'], $data['new_password']); // @phpstan-ignore-line
 
         return ApiResponse::jsonSuccess(new JsonResource([]), Response::HTTP_OK, 'Password updated successfully!');
     }
