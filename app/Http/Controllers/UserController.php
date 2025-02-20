@@ -116,7 +116,7 @@ class UserController extends Controller
         return [
             'token'      => $token,
             'type'       => 'bearer',
-            'expires_in' => auth('jwt')->factory()->getTTL() * TTL::JWT_TOKEN->value //@phpstan-ignore-line
+            'expires_in' => auth('jwt')->factory()->getTTL() * TTL::JWT_TOKEN->value // @phpstan-ignore-line
         ];
     }
 }
