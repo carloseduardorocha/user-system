@@ -36,5 +36,5 @@ To ensure the correct execution of the practical test and seamless integration o
 ## 🚨 **Got any questions? Watch the tutorial videos!** 🚨  
 
 - If you have any doubts during the **installation process**, [Watch the tutorial video here](https://www.loom.com/share/f6aac788143e4333af7dbaf73c9c90b5?sid=b8621f6e-947c-4680-b440-adda2bb71cdf).  
-- If you want to understand how to use **Laravel Passport endpoints**, [Watch the tutorial video here](#).  
+- If you want to understand how to use **Laravel Passport endpoints**, [Watch the tutorial video here](https://www.loom.com/share/735afd06516b4c9db8c9acf22ae7821b?sid=9c05ac26-91d8-4392-bd45-312c44586d0f).  
 - If you want to understand how to use **JWT Token endpoints**, [Watch the tutorial video here](#).  
