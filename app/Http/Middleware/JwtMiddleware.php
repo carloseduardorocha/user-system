@@ -15,7 +15,7 @@ class JwtMiddleware extends Middleware
 {
     public function handle($request, Closure $next, ...$guards)
     {
-        $user = JWTAuth::parseToken()->authenticate(); // @phpstan-ignore-line
+        $user = JWTAuth::parseToken()->authenticate();
 
         if (!$user)
         {
